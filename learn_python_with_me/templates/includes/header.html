@@ -1,0 +1,42 @@
+{% load static %}
+<header>
+  <nav class="navbar navbar-light" style="background-color: #dad7cd">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'blog:landing' %}" style="color: #588157">
+        <img src="{% static 'images/favicon-32x32.png' %}">
+      </a>
+      {% with request.resolver_match.view_name as view_name %}
+        <ul class="nav  nav-pills" >
+          <li class="nav-item" >
+            <a class="nav-link {% if view_name == 'lessons:index' %} text-white {% endif %}" href="{% url 'lessons:index' %}" style="color: #588157">
+              Учебник
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if view_name == 'pages:rules' %} text-white {% endif %}" href="{% url 'employment:index' %}"style="color: #588157">
+              Подготовка к собеседованию
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if view_name == 'pages:rules' %} text-white {% endif %}" href=""style="color: #588157">
+              О проекте
+            </a>
+          </li>
+          {% if user.is_authenticated %}
+            <div class="btn-group" role="group" aria-label="Basic outlined example">
+              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
+                  href="" style="color: #588157">Профиль</a></button>
+            </div>
+          {% else %}
+            <div class="btn-group" role="group" aria-label="Basic outlined example">
+              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
+                  href="">Войти</a></button>
+              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
+                  href="">Регистрация</a></button>
+            </div>
+          {% endif %}
+        </ul>
+      {% endwith %}
+    </div>
+  </nav>
+</header>

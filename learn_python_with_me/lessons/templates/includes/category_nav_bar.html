@@ -1,0 +1,22 @@
+{% load static %}
+<header>
+  <nav class="navbar navbar-light" style="background-color: #dad7cd">
+    <div class="container">
+      {% with request.resolver_match.view_name as view_name %}
+        <ul>
+          <li class="nav-item">
+            <a class="nav-link {% if view_name == 'pages:about' %} text-white {% endif %}" href="{% url 'lessons:index' %}">
+              Основы Python
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if view_name == 'pages:rules' %} text-white {% endif %}" href="">
+              ООП
+            </a>
+          </li>
+         
+        </ul>
+      {% endwith %}
+    </div>
+  </nav>
+</header>

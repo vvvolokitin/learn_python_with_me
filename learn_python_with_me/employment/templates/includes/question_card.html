@@ -1,0 +1,15 @@
+<div class="col d-flex justify-content-center">
+    <div class="card" style="width: 40rem;">
+      <div class="card-body">
+        <h3 class="card-title">
+          <a href="{{ question.get_absolute_url }}" class="card-link">{{ question.question }}</a></h3>
+        <h6 class="card-subtitle mb-2 text-muted">
+          <small>
+            {% if not question.is_published %}
+              <p class="text-danger">Вопрос снят с публикации </p>
+            {% endif %}
+          </small>
+        </h6>
+       </div>
+    </div>
+  </div>

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}
+  Вопросы на собеседованиях
+{% endblock %}
+{% block content %}
+
+  {% for question in page_obj %}
+    <article class="mb-5">
+      {% include "includes/question_card.html" %}
+    </article>
+  {% endfor %}
+  {% include "includes/paginator.html" %}
+{% endblock %}

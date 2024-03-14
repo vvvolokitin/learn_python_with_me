@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Learn Python With Me
+{% endblock %}
+
+{% block content %}
+<h1>Новости проекта!</h1>
+  {% for news in page_obj %}
+    <article class="mb-5">
+    </article>
+  {% endfor %}
+  {% include "includes/paginator.html" %}
+{% endblock %}
