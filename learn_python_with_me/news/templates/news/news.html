@@ -5,10 +5,10 @@
 {% endblock %}
 
 {% block content %}
-<h1>Новости python!</h1>
+<h1>Новости!</h1>
 <form method="get">
   {{ form.as_p }}
-  <button type="submit">Filter</button>
+  <button type="submit">Фильтр</button>
 </form>
 
 <ul>
@@ -16,7 +16,7 @@
   <li>
       <h2><a href="{{ article.url }}">{{ article.title }}</a></h2>
       <p>{{ article.description }}</p>
-      <p>Published at: {{ article.publishedAt }}</p>
+      <p>Опубилковано: {{ article.publishedAt }}</p>
   </li>
   {% endfor %}
 </ul>

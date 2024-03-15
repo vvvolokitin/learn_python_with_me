@@ -9,7 +9,7 @@ class NewsFilterForm(forms.Form):
     ]
 
     CATEGORIES = [
-        ('general', 'Главное'),
+        ('general', 'Главные'),
         ('business', 'Бизнес'),
         ('health', 'Здоровье'),
     ]

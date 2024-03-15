@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'blog.apps.BlogConfig',
     'lessons.apps.LessonsConfig',
-    'employment.apps.EmploymentConfig'
+    'employment.apps.EmploymentConfig',
+    'news.apps.NewsConfig',
 
 ]
 
