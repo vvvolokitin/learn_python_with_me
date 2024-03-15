@@ -88,3 +88,13 @@ class TestQuestionAdmin(admin.ModelAdmin):
 @admin.register(TestAnswer)
 class TestAnswerAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(Choice)
+class ChoiceAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Result)
+class ResultAdmin(admin.ModelAdmin):
+    pass

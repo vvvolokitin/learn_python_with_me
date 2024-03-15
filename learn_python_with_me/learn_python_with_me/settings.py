@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'ckeditor',
     'debug_toolbar',
+    'newsapi',
 
 
     'users.apps.UsersConfig',

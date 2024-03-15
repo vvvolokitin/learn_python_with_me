@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 
+
 from .models import News
+
 
 
 class LandingView(ListView):
@@ -14,5 +16,4 @@ class LandingView(ListView):
     paginate_by = 10
 
 
-def about_view(request):
-    pass
+
