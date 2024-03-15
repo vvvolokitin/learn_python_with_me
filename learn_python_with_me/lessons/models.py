@@ -150,6 +150,25 @@ class Comment(models.Model):
         verbose_name_plural = 'Комментарии'
 
 
+class LevelQuestion(models.Model):
+
+    level_name = models.CharField(
+        max_length=255,
+        verbose_name='Уровень сложности'
+    )
+    scores = models.IntegerField(
+        default=1,
+        verbose_name='Баллы'
+    )
+
+    class Meta:
+        verbose_name = 'Уровень сложности'
+        verbose_name_plural = 'Уровни сложности'
+
+    def __str__(self) -> str:
+        return self.level_name
+
+
 class TestQuestion(models.Model):
     class QuestionType(models.TextChoices):
         single = 'single'
@@ -159,8 +178,14 @@ class TestQuestion(models.Model):
         Lesson,
         on_delete=models.CASCADE,
         related_name='lesson_questions',
-        verbose_name='Урок'
-
+        verbose_name='Урок',
+    )
+    level = models.ForeignKey(
+        LevelQuestion,
+        on_delete=models.CASCADE,
+        related_name='level_questions',
+        verbose_name='Уровень сложности',
+        default=1,
     )
     question = models.CharField(
         max_length=500,
@@ -222,8 +247,6 @@ class TestAnswer(models.Model):
         verbose_name = 'Ответ'
         verbose_name_plural = 'Ответы'
 
-    
-
 
 class Choice(models.Model):
     user = models.ForeignKey(
@@ -252,6 +275,6 @@ class Result(models.Model):
     correct = models.IntegerField(
         default=0
     )
-    wrong = models.IntegerField(
+    scores = models.IntegerField(
         default=0
     )

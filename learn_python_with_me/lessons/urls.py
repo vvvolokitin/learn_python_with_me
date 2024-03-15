@@ -13,6 +13,5 @@ urlpatterns = [
          test_results, name='test_results'),
     path('<slug:category_slug>/<slug:lesson_slug>',
          LessonDetailView.as_view(), name='detail'),
-    # path('<slug:category_slug>/', CategoryListView.as_view(), name='category'),
-    path('', LessonListView.as_view(), name='index')
+    path('', LessonListView.as_view(), name='index'),
 ]

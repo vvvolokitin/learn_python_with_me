@@ -15,8 +15,8 @@
                                 <div class="profile-card-body">
                                     <div class="row mb-3">
                                         <div class="col-12">
-                                            <a class="btn btn-danger rounded-pill btn-sm mb-3"
-                                               href="/"><i class="fa fa-arrow-circle-left"></i> к урокам</a>
+                                            <a class="btn btn-success rounded-pill btn-sm mb-3"
+                                               href="{% url 'lessons:index' %}"><i class="fa fa-arrow-circle-left"></i> к урокам</a>
                                             <h6 class="fw-bold fs-1 text-200 my-3">{{ question.question}}</h6>
                                         </div>
                                     </div>
@@ -37,17 +37,23 @@
                                                         <td class="text-200 fw-bold text-center">{{ number }}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="text-200 fw-bold text-center">Правильные ответы</td>
+                                                        <td class="text-200 fw-bold text-center">Дано ответов</td>
                                                         <td class="text-200 fw-bold text-center">{{ correct }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-200 fw-bold text-center">Неправильные ответы</td>
-                                                        <td class="text-200 fw-bold text-center">{{ wrong }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td class="text-200 fw-bold text-center">Пропущено вопросов</td>
                                                         <td class="text-200 fw-bold text-center">{{ skipped }}</td>
                                                     </tr>
+
+                                                    <tr>
+                                                        <td class="text-200 fw-bold text-center">Набранно баллов за урок</td>
+                                                        <td class="text-200 fw-bold text-center">{{ scores }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-200 fw-bold text-center">Всего опыта</td>
+                                                        <td class="text-200 fw-bold text-center">{{ experience }}</td>
+                                                    </tr>
+
                                                 </tbody>
                                             </table>
                                         </div>

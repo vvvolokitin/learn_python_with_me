@@ -1,6 +1,6 @@
 from django.contrib import admin, messages
 
-from .models import Lesson, Category, Comment, TestAnswer, TestQuestion, Choice, Result
+from .models import Lesson, Category, Comment, TestAnswer, TestQuestion, Choice, Result, LevelQuestion
 
 
 @admin.register(Lesson)
@@ -78,10 +78,21 @@ class AnswerInline(admin.TabularInline):
 class TestQuestionAdmin(admin.ModelAdmin):
     list_display = (
         'question',
-        'lesson'
+        'lesson',
     )
     inlines = (
         AnswerInline,
+    )
+
+
+@admin.register(LevelQuestion)
+class LevelQuestionAdmin(admin.ModelAdmin):
+    list_display = (
+        'level_name',
+        'scores',
+    )
+    list_editable = (
+        'scores',
     )
 
 

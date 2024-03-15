@@ -6,8 +6,8 @@
 {% block content %}
 {{ quesion.lesson }}
 <hr>
-
   <b>{{ question.question }}</b>
+  
   <form id="question-form" action="{% url 'lessons:grade_question' lesson.category.slug lesson.slug question.id %}"
   method="post">
 
@@ -46,6 +46,12 @@
 <div id="question-feedback" class="col-12 mt-3 text-200 text-center"></div>
 </div>
 <div class="my-4">
+{% if previous_question %}
+  <div class="mt-5">
+      <a href="{% url 'lessons:test'  lesson.category.slug lesson.slug previous_question.id%}"
+         class="btn btn-primary btn-md rounded-pill"><i class="fa fa-arrow-circle-right"></i> Предыдущий вопрос</a>
+  </div>
+{% endif %}
 {% if next_question %}
   <div class="mt-5">
       <a href="{% url 'lessons:test'  lesson.category.slug lesson.slug next_question.id%}"
@@ -53,27 +59,22 @@
   </div>
 {% else %}
   <div class="text-200">
-      Это последний вопрос теста.
+      
       <a href="{% url 'lessons:test_results'  lesson.category.slug lesson.slug %}"
          class="btn btn-primary rounded-pill btn-md">Посмотреть результаты</a>
+         Это последний вопрос теста.
   </div>
-{% endif %}
+{% endif %} 
   </form>
-
 <script>
-     const form = document.getElementById("question-form");
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        fetch(form.action, {method:'post', body: new FormData(form)})
-            .then((response) => response.text())
-            .then(text => {
-                document.getElementById("question-feedback").innerHTML = text;
-            });
-    });
-
-    
-
-
-    </script>
-
+  const form = document.getElementById("question-form");
+ form.addEventListener("submit", (e) => {
+     e.preventDefault();
+     fetch(form.action, {method:'post', body: new FormData(form)})
+         .then((response) => response.text())
+         .then(text => {
+             document.getElementById("question-feedback").innerHTML = text;
+         });
+ });
+ </script>
 {% endblock %}

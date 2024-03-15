@@ -1,11 +1,11 @@
 from typing import Any
 
-from django.db.models import Count, F, Q
+from django.db.models import Count, F
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
 
 from .forms import CommentForm
-from .models import Category, Choice, Lesson, Result, TestAnswer, TestQuestion
+from .models import Choice, Lesson, Result, TestAnswer, TestQuestion
 
 
 class LessonListView(ListView):
@@ -54,18 +54,21 @@ class LessonDetailView(DetailView):
 def test_view(request, category_slug, lesson_slug, question_id):
     lesson = Lesson.objects.get(slug=lesson_slug)
     test = lesson.lesson_questions.all()
-    current_question, next_question = None, None
+    current_question, previous_question, next_question = None, None, None
 
     for index, question in enumerate(test):
         if question.id == question_id:
             current_question = question
             if index != len(test) - 1:
                 next_question = test[index + 1]
+            if index != 0:
+                previous_question = test[index-1]
     context = {
         'lesson': lesson,
         'test': test,
         'question': current_question,
         'next_question': next_question,
+        'previous_question': previous_question,
     }
     return render(
         request,
@@ -75,9 +78,12 @@ def test_view(request, category_slug, lesson_slug, question_id):
 
 
 def grade_question(request, category_slug, lesson_slug, question_id):
+    """Проверка правильности ответа."""
     question = get_object_or_404(TestQuestion, pk=question_id)
     lesson = get_object_or_404(Lesson, slug=lesson_slug)
+    user = request.user
     can_answer = question.user_can_answer(request.user)
+    scores = question.level.scores
     try:
         if not can_answer:
             return render(
@@ -93,22 +99,27 @@ def grade_question(request, category_slug, lesson_slug, question_id):
             correct_answer = question.get_answers().get(is_correct=True)
             user_answer = question.question_answers.get(
                 pk=request.POST['answer'])
+
+            is_correct = correct_answer == user_answer
+            if not is_correct:
+                return render(
+                    request,
+                    'lessons/partial.html',
+                    {
+                        'is_correct': is_correct,
+                    }
+                )
             choice = Choice(
-                user=request.user,
+                user=user,
                 question=question,
                 answer=user_answer
             )
             choice.save()
-            is_correct = correct_answer == user_answer
+
             result, created = Result.objects.get_or_create(
-                user=request.user,
+                user=user,
                 lesson=lesson
             )
-            if is_correct:
-                result.correct = F('correct') + 1
-            else:
-                result.wrong = F('wrong') + 1
-            result.save()
 
         elif question.question_type == 'multiple':
             correct_answer = question.get_answers().filter(is_correct=True)
@@ -118,22 +129,28 @@ def grade_question(request, category_slug, lesson_slug, question_id):
                 for answer_id in answers_ids:
                     user_answer = TestAnswer.objects.get(pk=answer_id)
                     user_answers.append(user_answer.name)
+
+                is_correct = correct_answer == user_answers
+                if not is_correct:
+                    return render(
+                        request,
+                        'lessons/partial.html',
+                        {
+                            'is_correct': is_correct,
+                        }
+                    )
+
+                for user_answer in user_answers:
                     choice = Choice(
-                        user=request.user,
+                        user=user,
                         question=question,
                         answer=user_answer
                     )
                     choice.save()
-                is_correct = correct_answer == user_answers
                 result, created = Result.objects.get_or_create(
-                    user=request.user,
+                    user=user,
                     lesson=lesson
                 )
-                if is_correct:
-                    result.correct = F('correct') + 1
-                else:
-                    result.wrong = F('wrong') + 1
-                result.save()
 
     except:
         return render(
@@ -141,32 +158,38 @@ def grade_question(request, category_slug, lesson_slug, question_id):
             'lessons/partial.html',
             {'question': question}
         )
+
+    result.correct = F('correct') + 1
+    result.balls = F('balls') + scores
+    user.experience = F('experience') + scores
+    user.save()
+    result.save()
     return render(
         request,
         'lessons/partial.html',
         {
             'is_correct': is_correct,
-            'correct_answer': correct_answer,
-            'question': question
         }
     )
 
 
 def test_results(request, category_slug, lesson_slug):
-    profile = request.user
+    """Вывод результата теста."""
+    user = request.user
     lesson = get_object_or_404(Lesson, slug=lesson_slug)
     test = lesson.lesson_questions.all()
-    results = Result.objects.filter(
-        user=profile,
+    results = Result.objects.get(
+        user=user,
         lesson=lesson
-    ).values()
-    correct = [i['correct'] for i in results][0]
-    wrong = [i['wrong'] for i in results][0]
+    )
+    correct = results.correct
+    scores = results.scores
     context = {'quiz': lesson,
-               'profile': profile,
+               'profile': user,
                'correct': correct,
-               'wrong': wrong,
+               'scores': scores,
+               'experience': user.experience,
                'number': len(test),
-               'skipped': len(test) - (correct + wrong)}
+               'skipped': len(test) - (correct)}
     return render(request,
                   'lessons/results.html', context)
