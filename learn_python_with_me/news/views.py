@@ -8,19 +8,18 @@ def news_list(request):
     api_key = config('API_KEY')
     newsapi = NewsApiClient(api_key=api_key)
 
-    country = 'us'
-    category = 'general'
+    language = 'ru'
 
     if request.method == 'GET':
         form = NewsFilterForm(request.GET)
         if form.is_valid():
-            country = form.cleaned_data['country']
-            category = form.cleaned_data['category']
+            language = form.cleaned_data['language']
 
-    articles = newsapi.get_top_headlines(
-        country=country,
-        category=category,
-        page_size=10
+    articles = newsapi.get_everything(
+        q='python OR программирование OR it',
+        language=language,
+        sort_by='relevancy',
+        page_size=20
     )
 
     return render(
@@ -28,6 +27,7 @@ def news_list(request):
         'news/news.html',
         {
             'articles': articles['articles'],
-            'form': form
+            'form': form,
+
         }
     )
