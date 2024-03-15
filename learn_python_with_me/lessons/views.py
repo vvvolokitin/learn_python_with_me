@@ -1,11 +1,11 @@
 from typing import Any
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView
-from django.db.models import Count, Q, F
-from django.http import JsonResponse
 
-from .models import Lesson, Category, TestAnswer, TestQuestion, Choice, Result
+from django.db.models import Count, F, Q
+from django.shortcuts import get_object_or_404, render
+from django.views.generic import DetailView, ListView
+
 from .forms import CommentForm
+from .models import Category, Choice, Lesson, Result, TestAnswer, TestQuestion
 
 
 class LessonListView(ListView):
