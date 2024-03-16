@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 from pytils.translit import slugify
 
+
 from lessons.managers import PublishedLessonManager
 
 User = get_user_model()

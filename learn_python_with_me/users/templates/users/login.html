@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if error %}
+<p><strong>Неправильный email или пароль.</strong></p>
+{% endif %}
+<h2>Вход</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Войти</button>
+</form>
+{% endblock content %}
