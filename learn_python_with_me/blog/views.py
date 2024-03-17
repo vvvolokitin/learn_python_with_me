@@ -42,7 +42,5 @@ class DetailNewsView(DetailView):
             self.model.objects.filter(
                 is_published=True
             ),
-            pk=self.kwargs[
-                self.pk
-            ]
+            pk=self.kwargs['pk']
         )

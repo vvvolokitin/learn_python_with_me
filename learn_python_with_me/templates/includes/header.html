@@ -1,48 +1,25 @@
 {% load static %}
-<header>
-  <nav class="navbar navbar-light" style="background-color: #dad7cd">
-    <div class="container">
-      <a class="navbar-brand" href="{% url 'blog:landing' %}" style="color: #588157">
-        <img src="{% static 'images/favicon-32x32.png' %}">
-      </a>
-      {% with request.resolver_match.view_name as view_name %}
-        <ul class="nav  nav-pills" >
-          <li class="nav-item" >
-            <a class="nav-link {% if view_name == "lessons:index" %} text-white {% endif %}" href="{% url 'lessons:index' %}" style="color: #588157">
-              Учебник
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {% if view_name == "employment:index" %} text-white {% endif %}" href="{% url 'employment:index' %}"style="color: #588157">
-              Подготовка к собеседованию
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {% if view_name == "news:news" %} text-white {% endif %}" href="{% url 'news:news' %}" style="color: #588157">
-              Новости IT
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {% if view_name == "" %} text-white {% endif %}" href=""style="color: #588157">
-              О проекте
-            </a>
-          </li>
-          {% if user.is_authenticated %}
-            <div class="btn-group" role="group" aria-label="Basic outlined example">
-              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
-                  href="">{{ user.username }}</a></button>
-              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
-                  href="{% url 'users:logout' %}">Выйти</a></button>
-            </div>
-          {% else %}
-            <div class="btn-group" role="group" aria-label="Basic outlined example">
-              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
-                  href="{% url 'users:login' %}">Войти</a></button>
-              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
-                  href="{% url 'users:signup' %}">Регистрация</a></button>
-          {% endif %}
-        </ul>
-      {% endwith %}
-    </div>
-  </nav>
+<header id="header" class="fixed-top">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+    <h1 class="logo me-auto me-lg-0"><a href="{% url 'blog:landing' %}">LearnPythonWithMe <img src="{% static 'images/favicon-32x32.png' %}" alt="" class="img-fluid"></a></h1>
+     <nav id="navbar" class="navbar order-last order-lg-0">
+
+      <ul>
+        <li><a {% if request.resolver_match.view_name == "blog:landing" %} class="active" {% endif %} href="{% url 'blog:landing'  %}">Главная страница</a></li>
+        <li><a {% if request.resolver_match.view_name == "lessons:index" %} class="active" {% endif %} href="{% url 'lessons:index' %}">Обучение</a></li>
+        <li><a {% if request.resolver_match.view_name == "employment:index" %} class="active" {% endif %} href="{% url 'employment:index' %}">Подготовка к собеседованию</a></li>
+        <li><a {% if request.resolver_match.view_name == "news:news" %} class="active" {% endif %} href="{% url 'news:news' %}">Новости IT</a></li>
+        <li><a {% if request.resolver_match.view_name == "" %} class="active" {% endif %} href="">О проекте</a></li>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'users:profile'  user.username %}">{{ user.username }}</a></li>
+        <li><a href="{% url 'users:logout' %}">Выйти</a></li>
+        {% else %}
+         <li> <a href="{% url 'users:login' %}">Войти</a></li>
+         <li> <a  href="{% url 'users:signup' %}">Регистрация</a></li>
+        {% endif %}
+      </ul>
+      <i class="bi bi-list mobile-nav-toggle"></i>
+    </nav>
+  </div>
 </header>
+

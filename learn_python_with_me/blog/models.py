@@ -46,7 +46,7 @@ class ProjectNews(models.Model):
         return f'{self.title[:10]}'
 
     def get_absolute_url(self):
-        return reverse('blog:post_detail', kwargs={'pk': self.pk})
+        return reverse('blog:project_news_detail', kwargs={'pk': self.pk})
 
 
 class CommentOnProjectNews(models.Model):

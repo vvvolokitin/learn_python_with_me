@@ -1,8 +1,30 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.urls import reverse
+from django.db.models import Count, Q
+from django.utils import timezone
+from django.contrib.auth import get_user_model
 
 from .forms import SignUpForm, LogInForm
+from .mixins import UserTestCastomMixin
+
+User = get_user_model()
+
+
+def user_profile(request, username):
+    """Профиль пользователя."""
+    profile = get_object_or_404(
+        User,
+        username=username
+    )
+
+    return render(
+        request,
+        'users/profile.html',
+        {
+            'profile': profile,
+        }
+    )
 
 
 def signup(request):

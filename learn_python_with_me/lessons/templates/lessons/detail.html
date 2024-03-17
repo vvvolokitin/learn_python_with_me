@@ -3,25 +3,8 @@
   {{ lesson.title }} 
 {% endblock %}
 {% block content %}
-  <div class="col d-flex justify-content-center">
-    <div class="card" style="width: 40rem;">
-      <div class="card-body">
-        {% if lesson.image %}
-          <a href="{{ lesson.image.url }}" target="_blank">
-            <img class="border-3 rounded img-fluid img-thumbnail mb-2 mx-auto d-block" src="{{ lesson.image.url }}">
-          </a>
-        {% endif %}
-        <h5 class="card-title">{{ lesson.title }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">
-          <small>
-            {% if not lesson.is_published %}
-              <p class="text-danger">Пост снят с публикации админом</p>
-            {% elif not lesson.category.is_published %}
-              <p class="text-danger">Выбранная категория снята с публикации админом</p>
-            {% endif %}
-
-          </small>
-        </h6>
+  <div>
+     
         <p class="card-body">{{ lesson.text|safe }}</p>
         <button  class="btn btn-success mt-3"
           onclick="window.location.href='{{ lesson.get_test_url }}';">
@@ -29,7 +12,5 @@
         </button>
 
         {% include "includes/comments.html" %}
-      </div>
-    </div>
   </div>
 {% endblock %}
