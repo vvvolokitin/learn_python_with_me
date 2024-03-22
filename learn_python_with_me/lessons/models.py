@@ -267,15 +267,21 @@ class Choice(models.Model):
 class Result(models.Model):
     lesson = models.ForeignKey(
         Lesson,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='lesson_results'
+
     )
     user = models.ForeignKey(
         User,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='results'
     )
     correct = models.IntegerField(
         default=0
     )
     scores = models.IntegerField(
         default=0
+    )
+    test_complete = models.BooleanField(
+        default=False
     )

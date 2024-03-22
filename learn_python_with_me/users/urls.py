@@ -1,5 +1,5 @@
 from django.urls import path, register_converter
-from .views import signup, log_in, log_out, user_profile
+from .views import signup, log_in, log_out, user_profile, EditProfile
 from .converters import UsernamePathConverter
 
 
@@ -7,6 +7,11 @@ register_converter(UsernamePathConverter, 'username')
 app_name = 'users'
 
 urlpatterns = [
+    path(
+        'edit_profile/',
+        EditProfile.as_view(),
+        name='edit_profile'
+    ),
     path(
         'profile/<username:username>/',
         user_profile,

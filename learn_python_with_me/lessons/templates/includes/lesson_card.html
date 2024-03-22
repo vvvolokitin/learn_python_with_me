@@ -1,5 +1,8 @@
+{% load lessons_tags %}
 <div >
         <h3 class="card-title">
-          <a href="{{ lesson.get_absolute_url }}" class="card-link">{{ lesson.title }}</a></h3>
+        <a href="{{ lesson.get_absolute_url }}" class="card-link">{{ lesson.title }}</a> | Количество вопросов в уроке : {{ lesson.question_count }} 
+        {% if user.is_authenticated  %} - Дано правильных ответов: {% get_count_correct_answers lesson user %} {% endif %}
+        </h3>
         <a href="{{ lesson.get_absolute_url }}" class="card-link text-muted">Комментарии ({{ lesson.comment_count }})</a>
 </div>

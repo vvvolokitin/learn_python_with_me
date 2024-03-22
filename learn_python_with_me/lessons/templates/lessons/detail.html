@@ -4,12 +4,16 @@
 {% endblock %}
 {% block content %}
   <div>
-     
+
         <p class="card-body">{{ lesson.text|safe }}</p>
+        {% if  user.is_authenticated%}
         <button  class="btn btn-success mt-3"
           onclick="window.location.href='{{ lesson.get_test_url }}';">
-          Пройти тест
+            Пройти тест
         </button>
+        {% else %}
+        <p>Для прохождения тестирования по пройденному уроку, необходимо выполнить <a href="{% url 'users:login' %}?next={{lesson.get_absolute_url}}">вход </a></p>
+        {% endif %}
 
         {% include "includes/comments.html" %}
   </div>

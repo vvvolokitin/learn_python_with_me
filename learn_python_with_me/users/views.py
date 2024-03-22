@@ -1,11 +1,12 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, authenticate, logout
-from django.urls import reverse
+from django.contrib.auth import authenticate, get_user_model, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.contrib.auth import get_user_model
+from django.views.generic import UpdateView
 
-from .forms import SignUpForm, LogInForm
+from .forms import EditProfileForm, LogInForm, SignUpForm, PasswordForm
 from .mixins import UserTestCastomMixin
 
 User = get_user_model()
@@ -27,6 +28,23 @@ def user_profile(request, username):
     )
 
 
+class EditProfile(LoginRequiredMixin, UpdateView):
+    template_name = 'users/edit_profile.html'
+    model = User
+    form_class = EditProfileForm
+
+    def get_object(self):
+        return self.request.user
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'users:profile',
+            kwargs={
+                'username': self.request.user
+            }
+        )
+
+
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -36,7 +54,11 @@ def signup(request):
             return redirect('blog:landing')
     else:
         form = SignUpForm()
-    return render(request, 'users/signup.html', {'form': form})
+    return render(
+        request,
+        'users/signup.html',
+        {'form': form}
+    )
 
 
 def log_in(request):
@@ -51,13 +73,21 @@ def log_in(request):
             user = authenticate(username=username, password=password)
             if user:
                 login(request, user)
+                if request.GET.get('next'):
+                    return redirect(request.GET.get('next'))
                 return redirect('blog:landing')
             else:
                 error = True
     else:
         form = LogInForm()
 
-    return render(request, 'users/login.html', {'form': form, 'error': error})
+    return render(
+        request,
+        'users/login.html',
+        {
+            'form': form,
+            'error': error}
+    )
 
 
 def log_out(request):

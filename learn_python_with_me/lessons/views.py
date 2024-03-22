@@ -1,4 +1,5 @@
 from typing import Any
+from django.contrib.auth.decorators import login_required
 
 from django.db.models import Count, F
 from django.shortcuts import get_object_or_404, render
@@ -17,7 +18,8 @@ class LessonListView(ListView):
         is_published=True,
         category__is_published=True
     ).annotate(
-        comment_count=Count('comments')
+        comment_count=Count('comments'),
+        question_count=Count('lesson_questions')
     )
     paginate_by = 10
 
@@ -37,6 +39,12 @@ class LessonDetailView(DetailView):
                 'author'
             )
         )
+        context['result'] = (
+            Result.objects.get(
+                user=self.request.user,
+                lesson=self.object
+            )
+        )
         return context
 
     def get_object(self, queryset=None):
@@ -51,6 +59,7 @@ class LessonDetailView(DetailView):
         )
 
 
+@login_required
 def test_view(request, category_slug, lesson_slug, question_id):
     lesson = Lesson.objects.get(slug=lesson_slug)
     test = lesson.lesson_questions.all()
@@ -77,6 +86,7 @@ def test_view(request, category_slug, lesson_slug, question_id):
     )
 
 
+@login_required
 def grade_question(request, category_slug, lesson_slug, question_id):
     """Проверка правильности ответа."""
     question = get_object_or_404(TestQuestion, pk=question_id)
@@ -160,10 +170,14 @@ def grade_question(request, category_slug, lesson_slug, question_id):
         )
 
     result.correct = F('correct') + 1
-    result.balls = F('balls') + scores
+    result.scores = F('scores') + scores
     user.experience = F('experience') + scores
     user.save()
     result.save()
+    # if not result.test_complete and result.correct == lesson.lesson_questions.count():
+    #     result.test_complete = True
+    #     result.save()
+
     return render(
         request,
         'lessons/partial.html',
@@ -173,17 +187,19 @@ def grade_question(request, category_slug, lesson_slug, question_id):
     )
 
 
+@login_required
 def test_results(request, category_slug, lesson_slug):
     """Вывод результата теста."""
     user = request.user
     lesson = get_object_or_404(Lesson, slug=lesson_slug)
     test = lesson.lesson_questions.all()
-    results = Result.objects.get(
+    result = Result.objects.get(
         user=user,
         lesson=lesson
     )
-    correct = results.correct
-    scores = results.scores
+
+    correct = result.correct
+    scores = result.scores
     context = {'quiz': lesson,
                'profile': user,
                'correct': correct,
