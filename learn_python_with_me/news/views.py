@@ -1,13 +1,19 @@
+import os
+
+from django.core.paginator import Paginator
 from django.shortcuts import render
+from dotenv import load_dotenv
 from newsapi import NewsApiClient
+
 from .forms import NewsFilterForm
-from decouple import config
+
+load_dotenv()
 
 
 def news_list(request):
-    api_key = config('API_KEY')
-    newsapi = NewsApiClient(api_key=api_key)
-
+    newsapi = NewsApiClient(
+        api_key=os.getenv('API_KEY')
+    )
     language = 'ru'
 
     if request.method == 'GET':
@@ -19,14 +25,16 @@ def news_list(request):
         q='python OR программирование OR it',
         language=language,
         sort_by='relevancy',
-        page_size=20
     )
+    paginator = Paginator(articles['articles'], 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     return render(
         request,
         'news/news.html',
         {
-            'articles': articles['articles'],
+            'page_obj': page_obj,
             'form': form,
 
         }

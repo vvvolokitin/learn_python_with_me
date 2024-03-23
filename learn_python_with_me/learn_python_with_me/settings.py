@@ -1,15 +1,17 @@
 import os
-from decouple import config
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 
-DEBUG = config('DJANGO_DEBUG')
+DEBUG = os.getenv('DJANGO_DEBUG')
 
 ALLOWED_HOSTS = [
     '127.0.0.1'

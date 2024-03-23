@@ -39,12 +39,6 @@ class LessonDetailView(DetailView):
                 'author'
             )
         )
-        context['result'] = (
-            Result.objects.get(
-                user=self.request.user,
-                lesson=self.object
-            )
-        )
         return context
 
     def get_object(self, queryset=None):

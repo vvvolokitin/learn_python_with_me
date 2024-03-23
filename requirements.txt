@@ -9,6 +9,7 @@ django-js-asset==2.2.0
 idna==3.6
 newsapi-python==0.2.7
 python-decouple==3.8
+python-dotenv==1.0.1
 pytils==0.4.1
 pytz==2024.1
 requests==2.31.0
